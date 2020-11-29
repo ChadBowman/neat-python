@@ -2507,15 +2507,12 @@ statistics
       :return: List of lists of species fitnesses, ordered by species :term:`id/key <key>`.
       :rtype: list(list(float or str))
 
-    .. py:method:: save_genome_fitness(delimiter=' ', filename='fitness_history.csv', with_cross_validation=False)
+    .. py:method:: save_genome_fitness(delimiter=' ', filename='fitness_history.csv')
 
-      Saves the population's best and mean fitness (using the `csv` package). At some point in the future, cross-validation fitness may be usable (via, for
-      instance, the fitness function using alternative test situations/opponents and recording this in a ``cross_fitness`` attribute; this can be used for, e.g.,
-      preventing overfitting); currently, ``with_cross_validation`` should always be left at its ``False`` default.
+      Saves the population's best and mean fitness (using the `csv` package). Saves the cross-validation fitness if applicable.
 
       :param str delimiter: Delimiter between columns in the file; note that the default is not ',' as may be otherwise implied by the ``csv`` file extension (which refers to the package used).
       :param str filename: The filename to open (for writing, not appending) and write to.
-      :param bool with_cross_validation: For future use; currently, leave at its ``False`` default.
 
     .. py:method:: save_species_count(delimiter=' ', filename='speciation.csv')
 

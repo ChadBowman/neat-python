@@ -41,7 +41,6 @@ def test_serial():
     p.run(eval_dummy_genomes_nn, 19)
 
     stats.save()
-    # stats.save_genome_fitness(with_cross_validation=True)
 
     assert len(stats.get_fitness_stdev())
     stats.best_unique_genomes(5)
@@ -108,7 +107,6 @@ def test_serial_random():
     p.run(eval_dummy_genomes_nn, 45)
 
     stats.save()
-    # stats.save_genome_fitness(with_cross_validation=True)
 
     stats.get_fitness_stdev()
     stats.best_unique_genomes(5)
@@ -144,7 +142,6 @@ def test_serial3():
     p.run(eval_dummy_genomes_nn, 45)
 
     stats.save()
-    # stats.save_genome_fitness(with_cross_validation=True)
 
     stats.get_fitness_stdev()
     stats.best_unique_genomes(5)
@@ -180,7 +177,6 @@ def test_serial4():
     p.run(eval_dummy_genomes_nn, 45)
 
     stats.save()
-    # stats.save_genome_fitness(with_cross_validation=True)
 
     stats.get_fitness_stdev()
     stats.best_unique_genomes(5)
@@ -216,7 +212,6 @@ def test_serial5():
     p.run(eval_dummy_genomes_nn, 45)
 
     stats.save()
-    # stats.save_genome_fitness(with_cross_validation=True)
 
     stats.get_fitness_stdev()
     stats.best_unique_genomes(5)
