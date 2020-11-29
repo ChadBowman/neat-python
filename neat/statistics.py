@@ -28,30 +28,40 @@ class StatisticsReporter(BaseReporter):
         # Store the fitnesses of the members of each currently active species.
         species_stats = {}
         for sid, s in species.species.items():
-            species_stats[sid] = dict((k, v.fitness) for k, v in s.members.items())
+            fitness = {
+                k: {
+                    'fitness': v.fitness,
+                    'cv_fitness': v.cv_fitness if hasattr(v, 'cv_fitness') else None
+                } for k, v in s.members.items()
+            }
+            species_stats[sid] = fitness
         self.generation_statistics.append(species_stats)
 
-    def get_fitness_stat(self, f):
+    def get_fitness_stat(self, f, cross_validation=False):
         stat = []
         for stats in self.generation_statistics:
             scores = []
             for species_stats in stats.values():
-                scores.extend(species_stats.values())
+                for fitnesses in species_stats.values():
+                    if cross_validation:
+                        scores.append(fitnesses['cv_fitness'])
+                    else:
+                        scores.append(fitnesses['fitness'])
             stat.append(f(scores))
 
         return stat
 
-    def get_fitness_mean(self):
+    def get_fitness_mean(self, cross_validation=False):
         """Get the per-generation mean fitness."""
-        return self.get_fitness_stat(mean)
+        return self.get_fitness_stat(mean, cross_validation)
 
-    def get_fitness_stdev(self):
+    def get_fitness_stdev(self, cross_validation=False):
         """Get the per-generation standard deviation of the fitness."""
-        return self.get_fitness_stat(stdev)
+        return self.get_fitness_stat(stdev, cross_validation)
 
-    def get_fitness_median(self):
+    def get_fitness_median(self, cross_validation=False):
         """Get the per-generation median fitness."""
-        return self.get_fitness_stat(median2)
+        return self.get_fitness_stat(median2, cross_validation)
 
     def best_unique_genomes(self, n):
         """Returns the most n fit genomes, with no duplication."""
@@ -91,8 +101,15 @@ class StatisticsReporter(BaseReporter):
             best_fitness = [c.fitness for c in self.most_fit_genomes]
             avg_fitness = self.get_fitness_mean()
 
-            for best, avg in zip(best_fitness, avg_fitness):
-                w.writerow([best, avg])
+            if hasattr(self.most_fit_genomes[0], 'cv_fitness'):
+                best_cv_fitness = [c.cv_fitness for c in self.most_fit_genomes]
+                avg_cv_fitness = self.get_fitness_mean(cross_validation=True)
+                agg = zip(best_fitness, avg_fitness, best_cv_fitness, avg_cv_fitness)
+                for best, avg, best_cv, avg_cv in agg:
+                    w.writerow([best, avg, best_cv, avg_cv])
+            else:
+                for best, avg in zip(best_fitness, avg_fitness):
+                    w.writerow([best, avg])
 
     def save_species_count(self, delimiter=' ', filename='speciation.csv'):
         """ Log speciation throughout evolution. """
