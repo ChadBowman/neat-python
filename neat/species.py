@@ -15,6 +15,7 @@ class Species(object):
         self.fitness = None
         self.adjusted_fitness = None
         self.fitness_history = []
+        self.cv_fitness = None
 
     def update(self, representative, members):
         self.representative = representative
@@ -22,6 +23,9 @@ class Species(object):
 
     def get_fitnesses(self):
         return [m.fitness for m in self.members.values()]
+
+    def get_cv_fitnesses(self):
+        return [m.cv_fitness for m in self.members.values()]
 
 
 class GenomeDistanceCache(object):

@@ -44,6 +44,7 @@ class DefaultStagnation(DefaultClassConfig):
                 prev_fitness = -sys.float_info.max
 
             s.fitness = self.species_fitness_func(s.get_fitnesses())
+            s.cv_fitness = self.species_fitness_func(s.get_cv_fitnesses())
             s.fitness_history.append(s.fitness)
             s.adjusted_fitness = None
             if prev_fitness is None or s.fitness > prev_fitness:

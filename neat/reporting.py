@@ -102,17 +102,20 @@ class StdOutReporter(BaseReporter):
         ns = len(species_set.species)
         if self.show_species_detail:
             print('Population of {0:d} members in {1:d} species:'.format(ng, ns))
-            print("   ID   age  size  fitness  adj fit  stag")
-            print("  ====  ===  ====  =======  =======  ====")
+            print("   ID   age  size  fitness  validation  adj fit  stag")
+            print("  ====  ===  ====  =======  ==========  =======  ====")
             for sid in sorted(species_set.species):
                 s = species_set.species[sid]
                 a = self.generation - s.created
                 n = len(s.members)
                 f = "--" if s.fitness is None else "{:.1f}".format(s.fitness)
+                v = "--" if s.cv_fitness is None else "{:.1f}".format(s.cv_fitness)
                 af = "--" if s.adjusted_fitness is None else "{:.3f}".format(s.adjusted_fitness)
                 st = self.generation - s.last_improved
                 print(
-                    "  {: >4}  {: >3}  {: >4}  {: >7}  {: >7}  {: >4}".format(sid, a, n, f, af, st))
+                    "  {: >4}  {: >3}  {: >4}  {: >7}  {: >10}  {: >7}  {: >4}"
+                    .format(sid, a, n, f, v, af, st)
+                )
         else:
             print('Population of {0:d} members in {1:d} species'.format(ng, ns))
 
